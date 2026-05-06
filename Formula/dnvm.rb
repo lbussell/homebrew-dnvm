@@ -4,17 +4,13 @@ class Dnvm < Formula
   url "https://github.com/dn-vm/dnvm.git",
       tag:      "v1.1.2",
       revision: "ff50ec0b039261c85fa807a6d0dfb85319064fa6"
-  license "GPL-3.0"
+  license "GPL-3.0-only"
 
   depends_on "dotnet" => :build
 
   def install
     # Determine the .NET RID for the current platform
-    if OS.mac?
-      os = "osx"
-    else
-      os = "linux"
-    end
+    os = OS.mac? ? "osx" : "linux"
     arch = Hardware::CPU.arm? ? "arm64" : "x64"
     rid = "#{os}-#{arch}"
 
