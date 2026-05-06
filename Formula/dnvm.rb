@@ -7,6 +7,8 @@ class Dnvm < Formula
   license "GPL-3.0-only"
 
   depends_on "dotnet" => :build
+  depends_on "brotli"
+  depends_on "openssl@3"
 
   def install
     # Determine the .NET RID for the current platform
@@ -24,6 +26,9 @@ class Dnvm < Formula
     ]
 
     system "dotnet", "publish", "src/dnvm/dnvm.csproj", *args
+
+    # Remove macOS debug symbol bundles
+    rm_r(bin/"dnvm.dSYM") if (bin/"dnvm.dSYM").exist?
   end
 
   test do
