@@ -1,8 +1,5 @@
 FROM ghcr.io/homebrew/brew:latest
 
-# Install build dependency (allow API/updates to get dotnet 10)
-# RUN brew install dotnet
-
 ENV HOMEBREW_NO_AUTO_UPDATE=1
 
 # Copy the formula into the tap
