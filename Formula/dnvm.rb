@@ -1,38 +1,36 @@
-# Documentation: https://docs.brew.sh/Formula-Cookbook
-#                https://docs.brew.sh/rubydoc/Formula
-# PLEASE REMOVE ALL GENERATED COMMENTS BEFORE SUBMITTING YOUR PULL REQUEST!
 class Dnvm < Formula
-  desc "dnvm is a command-line interface for installing and updating different dotnet SDKs"
+  desc "Command-line interface for installing and updating dotnet SDKs"
   homepage "https://dnvm.net"
-  url "https://github.com/dn-vm/dnvm/archive/refs/tags/v1.1.2.tar.gz"
-  sha256 "8d9a5f7432f9db53ea0ca10069b428f3b89cb2fbd3eb3da9d0ea752e09b67730"
+  url "https://github.com/dn-vm/dnvm.git",
+      tag:      "v1.1.2",
+      revision: "ff50ec0b039261c85fa807a6d0dfb85319064fa6"
   license "GPL-3.0"
 
-  # depends_on "cmake" => :build
-
-  # Additional dependency
-  # resource "" do
-  #   url ""
-  #   sha256 ""
-  # end
+  depends_on "dotnet" => :build
 
   def install
-    # Remove unrecognized options if they cause configure to fail
-    # https://docs.brew.sh/rubydoc/Formula.html#std_configure_args-instance_method
-    system "./configure", "--disable-silent-rules", *std_configure_args
-    # system "cmake", "-S", ".", "-B", "build", *std_cmake_args
+    # Determine the .NET RID for the current platform
+    if OS.mac?
+      os = "osx"
+    else
+      os = "linux"
+    end
+    arch = Hardware::CPU.arm? ? "arm64" : "x64"
+    rid = "#{os}-#{arch}"
+
+    args = %W[
+      --configuration Release
+      --self-contained
+      --runtime #{rid}
+      --output #{bin}
+      -p:DebugType=None
+      -p:DebugSymbols=false
+    ]
+
+    system "dotnet", "publish", "src/dnvm/dnvm.csproj", *args
   end
 
   test do
-    # `test do` will create, run in and delete a temporary directory.
-    #
-    # This test will fail and we won't accept that! For Homebrew/homebrew-core
-    # this will need to be a test that verifies the functionality of the
-    # software. Run the test with `brew test dnvm`. Options passed
-    # to `brew install` such as `--HEAD` also need to be provided to `brew test`.
-    #
-    # The installed folder is not in the path, so use the entire path to any
-    # executables being tested: `system bin/"program", "do", "something"`.
-    system "false"
+    assert_match "usage: dnvm", shell_output("#{bin}/dnvm --help")
   end
 end
