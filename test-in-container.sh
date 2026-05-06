@@ -4,11 +4,11 @@ set -e
 IMAGE_NAME="dnvm-brew-test"
 
 echo "=== Building test image ==="
-docker build --progress=plain --tag "$IMAGE_NAME" .
+docker build --progress=plain --tag "${IMAGE_NAME}" .
 
 echo ""
 echo "=== Testing dnvm in container ==="
-docker run --rm "$IMAGE_NAME" bash -c '
+docker run --rm "${IMAGE_NAME}" bash -c '
   echo "=== dnvm --help ==="
   dnvm --help
   echo ""
