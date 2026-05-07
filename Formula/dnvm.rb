@@ -6,6 +6,12 @@ class Dnvm < Formula
       revision: "ff50ec0b039261c85fa807a6d0dfb85319064fa6"
   license "GPL-3.0-only"
 
+  bottle do
+    root_url "https://github.com/lbussell/homebrew-dnvm/releases/download/dnvm-1.1.2"
+    sha256 cellar: :any,                 arm64_tahoe:  "5459a52c7ee07886d7459650a067053cc0cfdc0f6e48dee93da6670abf2525a9"
+    sha256 cellar: :any_skip_relocation, x86_64_linux: "18ecef77d8d517d747daa85aa68f1ae0ce42f4fb51957de047693046dd1950ac"
+  end
+
   depends_on "dotnet" => :build
   depends_on "brotli"
   depends_on "openssl@3"
